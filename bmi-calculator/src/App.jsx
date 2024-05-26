@@ -1,34 +1,52 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+import React, {useMemo, useState} from 'react'
 import './App.css'
 
 function App() {
-  const [count, setCount] = useState(0)
+
+  const [height, setHeight] = useState(180);
+  const [weight, setWeight] = useState(70);
+
+  function onWeightChange(event){
+      setWeight(event.target.value);
+      console.log(weight)
+  }
+
+  function onHeightChange(event){
+    setHeight(event.target.value);
+    console.log(height)
+  }
+
+  const output = useMemo(() => {
+    const calculateHeight = height/100;
+
+    return (weight/(calculateHeight*calculateHeight)).toFixed(1)
+
+  }, [weight, height]);
 
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+    <main>
+      <h1>BMI CALCULATOR</h1>
+      <div className="input-section">
+        <p className='slider-output'>Weight: {weight} kg</p>
+        <input className="input-slider"
+        type="range"
+        step="1"
+        min="40"
+        max="200"
+        onChange={onWeightChange}/>
+
+        <p className='slider-output'>Height: {height} cm</p>
+        <input className="input-slider"
+        type="range"
+        min="140"
+        max="220"
+        onChange={onHeightChange}/>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
+      <div className='output-section'>
+        <p>Your BMI is</p>
+        <p className='output'>{output}</p>
       </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    </main>
   )
 }
 
